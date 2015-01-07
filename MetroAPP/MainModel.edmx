@@ -1,0 +1,843 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MainDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BlogComment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommentIdBlog" Type="int" Nullable="false" />
+          <Property Name="CommentText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CommentDate" Type="datetime" />
+          <Property Name="KorisnikId" Type="int" />
+        </EntityType>
+        <EntityType Name="BlogItem">
+          <Key>
+            <PropertyRef Name="BlogId" />
+          </Key>
+          <Property Name="BlogId" Type="int" Nullable="false" />
+          <Property Name="BlogImageUrl" Type="nvarchar(max)" />
+          <Property Name="BlogNaslovnica" Type="nvarchar(max)" />
+          <Property Name="BlogTextSample" Type="nvarchar(max)" />
+          <Property Name="BlogText" Type="nvarchar(max)" />
+          <Property Name="BlogActionLink" Type="nvarchar(max)" />
+          <Property Name="BlogLikes" Type="int" />
+          <Property Name="CommentId" Type="int" />
+          <Property Name="KorisnikId" Type="int" />
+          <Property Name="BlogPage" Type="int" />
+          <Property Name="BlogItemDate" Type="date" />
+        </EntityType>
+        <EntityType Name="GalleryAndSliderAndNaslovnica">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PictureSrc" Type="nvarchar(max)" />
+          <Property Name="PicturePage" Type="nvarchar(max)" />
+          <Property Name="NaslovnicaItemNaslov" Type="nvarchar(max)" />
+          <Property Name="NaslovnicaItemText" Type="nvarchar(max)" />
+          <Property Name="NaslovnicaItemActionLink" Type="nvarchar(max)" />
+          <Property Name="SliderListItemActive" Type="nvarchar(max)" />
+          <Property Name="ItemHTMLplace" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="KorisnikId" />
+          </Key>
+          <Property Name="KorisnikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KorisnikIme" Type="nvarchar(max)" />
+          <Property Name="KorisnikPrezime" Type="nvarchar(max)" />
+          <Property Name="KorisnikRegistracija" Type="datetime" />
+          <Property Name="KorisnikSlika" Type="nvarchar(max)" />
+          <Property Name="KorisnikPassword" Type="nvarchar(max)" />
+          <Property Name="KorisnikUsername" Type="nvarchar(max)" />
+          <Property Name="KorisnikPasswordSalt" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Proizvod">
+          <Key>
+            <PropertyRef Name="ProizvodId" />
+          </Key>
+          <Property Name="ProizvodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProizvodImgSrc" Type="nvarchar(max)" />
+          <Property Name="ProizvodNaziv" Type="nvarchar(max)" />
+          <Property Name="ProizvodCijena" Type="money" />
+          <Property Name="ProizvodPage" Type="int" />
+          <Property Name="ProizvodCategory" Type="nvarchar(max)" />
+          <Property Name="ProizvodOpis" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_BlogItem_ToBlogComment">
+          <End Role="BlogComment" Type="Self.BlogComment" Multiplicity="0..1" />
+          <End Role="BlogItem" Type="Self.BlogItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogComment">
+              <PropertyRef Name="CommentId" />
+            </Principal>
+            <Dependent Role="BlogItem">
+              <PropertyRef Name="CommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CHECKKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="DELETEGalleryItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PictureId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DELETEHellsBells" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DELETEKorisnikItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KorisnikId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DELETENaslovnicaItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INSERTBlogComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CommentIdBlog" Type="int" Mode="In" />
+          <Parameter Name="CommentText" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="CommentDate" Type="datetime" Mode="In" />
+          <Parameter Name="KorisnikId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="INSERTGalleryItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PictureSrc" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="PicturePage" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ItemHTMLplace" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INSERTHellsBells" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodImgSrc" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ProizvodNaziv" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ProizvodCijena" Type="money" Mode="In" />
+          <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+          <Parameter Name="ProizvodCategory" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ProizvodOpis" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INSERTKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KorisnikIme" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="KorisnikPrezime" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="KorisnikRegistracija" Type="datetime" Mode="In" />
+          <Parameter Name="KorisnikSlika" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="KorisnikPassword" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="INSERTNaslovnicaItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PictureSrc" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="NaslovnicaItemNaslov" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="NaslovnicaItemText" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="NaslovnicaItemActionLink" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="SliderListItemActive" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ItemHTMLplace" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SEARCHKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="KorisnikPassword" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SEARCHProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodName" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SELECTAllBlogComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CommentIdBlog" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECTAllBlogDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BlogId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECTAllBlogItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BlockPage" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECTAllBlogKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KorisnikId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECTAllBlogPages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllBlogRecentComments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllGalleryImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllNaslovnicaDataListItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllNaslovnicaSliderListItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTAllProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SELECTDistinctAllProizvodPages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SELECTOrSearchProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+          <Parameter Name="ProizvodSearch" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SELECTOrSearchProizvodDescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodSearch" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SELECTOrSearchProizvodId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProizvodSearch" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="MainDatabaseModelStoreContainer">
+          <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogItem" EntityType="Self.BlogItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GalleryAndSliderAndNaslovnica" EntityType="Self.GalleryAndSliderAndNaslovnica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proizvod" EntityType="Self.Proizvod" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BlogItem_ToBlogComment" Association="Self.FK_BlogItem_ToBlogComment">
+            <End Role="BlogComment" EntitySet="BlogComment" />
+            <End Role="BlogItem" EntitySet="BlogItem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MainDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BlogComment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommentIdBlog" Type="Int32" Nullable="false" />
+          <Property Name="CommentText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CommentDate" Type="DateTime" Precision="3" />
+          <Property Name="KorisnikId" Type="Int32" />
+          <NavigationProperty Name="BlogItem" Relationship="Self.FK_BlogItem_ToBlogComment" FromRole="BlogComment" ToRole="BlogItem" />
+        </EntityType>
+        <EntityType Name="BlogItem">
+          <Key>
+            <PropertyRef Name="BlogId" />
+          </Key>
+          <Property Name="BlogId" Type="Int32" Nullable="false" />
+          <Property Name="BlogImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BlogNaslovnica" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BlogTextSample" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BlogText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BlogActionLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BlogLikes" Type="Int32" />
+          <Property Name="CommentId" Type="Int32" />
+          <Property Name="KorisnikId" Type="Int32" />
+          <Property Name="BlogPage" Type="Int32" />
+          <Property Name="BlogItemDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="BlogComment" Relationship="Self.FK_BlogItem_ToBlogComment" FromRole="BlogItem" ToRole="BlogComment" />
+        </EntityType>
+        <EntityType Name="GalleryAndSliderAndNaslovnica">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PictureSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicturePage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NaslovnicaItemNaslov" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NaslovnicaItemText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NaslovnicaItemActionLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SliderListItemActive" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ItemHTMLplace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="KorisnikId" />
+          </Key>
+          <Property Name="KorisnikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KorisnikIme" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KorisnikPrezime" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KorisnikRegistracija" Type="DateTime" Precision="3" />
+          <Property Name="KorisnikSlika" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KorisnikPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KorisnikUsername" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KorisnikPasswordSalt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Proizvod">
+          <Key>
+            <PropertyRef Name="ProizvodId" />
+          </Key>
+          <Property Name="ProizvodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProizvodImgSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProizvodNaziv" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProizvodCijena" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ProizvodPage" Type="Int32" />
+          <Property Name="ProizvodCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProizvodOpis" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_BlogItem_ToBlogComment">
+          <End Role="BlogComment" Type="Self.BlogComment" Multiplicity="0..1" />
+          <End Role="BlogItem" Type="Self.BlogItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogComment">
+              <PropertyRef Name="CommentId" />
+            </Principal>
+            <Dependent Role="BlogItem">
+              <PropertyRef Name="CommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MainDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BlogComment" EntityType="Self.BlogComment" />
+          <EntitySet Name="BlogItem" EntityType="Self.BlogItem" />
+          <EntitySet Name="GalleryAndSliderAndNaslovnica" EntityType="Self.GalleryAndSliderAndNaslovnica" />
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" />
+          <EntitySet Name="Proizvod" EntityType="Self.Proizvod" />
+          <AssociationSet Name="FK_BlogItem_ToBlogComment" Association="Self.FK_BlogItem_ToBlogComment">
+            <End Role="BlogComment" EntitySet="BlogComment" />
+            <End Role="BlogItem" EntitySet="BlogItem" />
+          </AssociationSet>
+          <FunctionImport Name="CHECKKorisnik" ReturnType="Collection(Int32)">
+            <Parameter Name="KorisnikUsername" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DELETEGalleryItem">
+            <Parameter Name="PictureId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DELETEHellsBells">
+            <Parameter Name="ProizvodId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DELETEKorisnikItem">
+            <Parameter Name="KorisnikId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DELETENaslovnicaItem">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INSERTBlogComment">
+            <Parameter Name="CommentIdBlog" Mode="In" Type="Int32" />
+            <Parameter Name="CommentText" Mode="In" Type="String" />
+            <Parameter Name="CommentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="KorisnikId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="INSERTGalleryItem">
+            <Parameter Name="PictureSrc" Mode="In" Type="String" />
+            <Parameter Name="PicturePage" Mode="In" Type="String" />
+            <Parameter Name="ItemHTMLplace" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INSERTHellsBells">
+            <Parameter Name="ProizvodImgSrc" Mode="In" Type="String" />
+            <Parameter Name="ProizvodNaziv" Mode="In" Type="String" />
+            <Parameter Name="ProizvodCijena" Mode="In" Type="Decimal" />
+            <Parameter Name="ProizvodPage" Mode="In" Type="Int32" />
+            <Parameter Name="ProizvodCategory" Mode="In" Type="String" />
+            <Parameter Name="ProizvodOpis" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INSERTKorisnik">
+            <Parameter Name="KorisnikIme" Mode="In" Type="String" />
+            <Parameter Name="KorisnikPrezime" Mode="In" Type="String" />
+            <Parameter Name="KorisnikRegistracija" Mode="In" Type="DateTime" />
+            <Parameter Name="KorisnikSlika" Mode="In" Type="String" />
+            <Parameter Name="KorisnikPassword" Mode="In" Type="String" />
+            <Parameter Name="KorisnikUsername" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="INSERTNaslovnicaItem">
+            <Parameter Name="PictureSrc" Mode="In" Type="String" />
+            <Parameter Name="NaslovnicaItemNaslov" Mode="In" Type="String" />
+            <Parameter Name="NaslovnicaItemText" Mode="In" Type="String" />
+            <Parameter Name="NaslovnicaItemActionLink" Mode="In" Type="String" />
+            <Parameter Name="SliderListItemActive" Mode="In" Type="String" />
+            <Parameter Name="ItemHTMLplace" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SEARCHKorisnik" ReturnType="Collection(MainDatabaseModel.SEARCHKorisnik_Result)">
+            <Parameter Name="KorisnikUsername" Mode="In" Type="String" />
+            <Parameter Name="KorisnikPassword" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SEARCHProizvod" ReturnType="Collection(MainDatabaseModel.SEARCHProizvod_Result)">
+            <Parameter Name="ProizvodName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTAllBlogComment" ReturnType="Collection(MainDatabaseModel.SELECTAllBlogComment_Result)">
+            <Parameter Name="CommentIdBlog" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTAllBlogDetails" ReturnType="Collection(MainDatabaseModel.SELECTAllBlogDetails_Result)">
+            <Parameter Name="BlogId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTAllBlogItem" ReturnType="Collection(MainDatabaseModel.SELECTAllBlogItem_Result)">
+            <Parameter Name="BlockPage" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTAllBlogKorisnik" ReturnType="Collection(MainDatabaseModel.SELECTAllBlogKorisnik_Result)">
+            <Parameter Name="KorisnikId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTAllBlogPages" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="SELECTAllBlogRecentComments" ReturnType="Collection(MainDatabaseModel.SELECTAllBlogRecentComments_Result)" />
+          <FunctionImport Name="SELECTAllGalleryImage" ReturnType="Collection(MainDatabaseModel.SELECTAllGalleryImage_Result)" />
+          <FunctionImport Name="SELECTAllKorisnik" ReturnType="Collection(MainDatabaseModel.SELECTAllKorisnik_Result)" />
+          <FunctionImport Name="SELECTAllNaslovnicaDataListItem" ReturnType="Collection(MainDatabaseModel.SELECTAllNaslovnicaDataListItem_Result)" />
+          <FunctionImport Name="SELECTAllNaslovnicaSliderListItem" ReturnType="Collection(MainDatabaseModel.SELECTAllNaslovnicaSliderListItem_Result)" />
+          <FunctionImport Name="SELECTAllProizvod" ReturnType="Collection(MainDatabaseModel.SELECTAllProizvod_Result)">
+            <Parameter Name="ProizvodPage" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTDistinctAllProizvodPages" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="SELECTOrSearchProizvod" ReturnType="Collection(MainDatabaseModel.SELECTOrSearchProizvod_Result)">
+            <Parameter Name="ProizvodPage" Mode="In" Type="Int32" />
+            <Parameter Name="ProizvodSearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTOrSearchProizvodDescription" ReturnType="Collection(MainDatabaseModel.SELECTOrSearchProizvodDescription_Result)">
+            <Parameter Name="ProizvodSearch" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SELECTOrSearchProizvodId" ReturnType="Collection(MainDatabaseModel.SELECTOrSearchProizvodId_Result)">
+            <Parameter Name="ProizvodSearch" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SEARCHKorisnik_Result">
+          <Property Type="Int32" Name="KorisnikId" Nullable="false" />
+          <Property Type="String" Name="KorisnikIme" Nullable="true" />
+          <Property Type="String" Name="KorisnikPrezime" Nullable="true" />
+          <Property Type="DateTime" Name="KorisnikRegistracija" Nullable="true" Precision="23" />
+          <Property Type="String" Name="KorisnikSlika" Nullable="true" />
+          <Property Type="String" Name="KorisnikPassword" Nullable="true" />
+          <Property Type="String" Name="KorisnikUsername" Nullable="true" />
+          <Property Type="String" Name="KorisnikPasswordSalt" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SEARCHProizvod_Result">
+          <Property Type="Int32" Name="ProizvodId" Nullable="false" />
+          <Property Type="String" Name="ProizvodImgSrc" Nullable="true" />
+          <Property Type="String" Name="ProizvodNaziv" Nullable="true" />
+          <Property Type="Decimal" Name="ProizvodCijena" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ProizvodPage" Nullable="true" />
+          <Property Type="String" Name="ProizvodCategory" Nullable="true" />
+          <Property Type="String" Name="ProizvodOpis" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllBlogComment_Result">
+          <Property Type="Int32" Name="CommentId" Nullable="false" />
+          <Property Type="Int32" Name="CommentIdBlog" Nullable="false" />
+          <Property Type="String" Name="CommentText" Nullable="false" />
+          <Property Type="DateTime" Name="CommentDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="KorisnikId" Nullable="true" />
+          <Property Type="String" Name="KorisnikIme" Nullable="true" />
+          <Property Type="String" Name="KorisnikPrezime" Nullable="true" />
+          <Property Type="String" Name="KorisnikSlika" Nullable="true" />
+          <Property Type="DateTime" Name="KorisnikRegistracija" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllBlogDetails_Result">
+          <Property Type="Int32" Name="BlogId" Nullable="false" />
+          <Property Type="String" Name="BlogImageUrl" Nullable="true" />
+          <Property Type="String" Name="BlogNaslovnica" Nullable="true" />
+          <Property Type="String" Name="BlogTextSample" Nullable="true" />
+          <Property Type="String" Name="BlogText" Nullable="true" />
+          <Property Type="String" Name="BlogActionLink" Nullable="true" />
+          <Property Type="Int32" Name="BlogLikes" Nullable="true" />
+          <Property Type="Int32" Name="CommentId" Nullable="true" />
+          <Property Type="Int32" Name="KorisnikId" Nullable="true" />
+          <Property Type="Int32" Name="BlogPage" Nullable="true" />
+          <Property Type="DateTime" Name="BlogItemDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllBlogItem_Result">
+          <Property Type="Int32" Name="BlogId" Nullable="false" />
+          <Property Type="String" Name="BlogImageUrl" Nullable="true" />
+          <Property Type="String" Name="BlogNaslovnica" Nullable="true" />
+          <Property Type="String" Name="BlogTextSample" Nullable="true" />
+          <Property Type="String" Name="BlogText" Nullable="true" />
+          <Property Type="String" Name="BlogActionLink" Nullable="true" />
+          <Property Type="Int32" Name="BlogLikes" Nullable="true" />
+          <Property Type="Int32" Name="CommentId" Nullable="true" />
+          <Property Type="Int32" Name="KorisnikId" Nullable="true" />
+          <Property Type="Int32" Name="BlogPage" Nullable="true" />
+          <Property Type="DateTime" Name="BlogItemDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllBlogKorisnik_Result">
+          <Property Type="Int32" Name="KorisnikId" Nullable="false" />
+          <Property Type="String" Name="KorisnikIme" Nullable="true" />
+          <Property Type="String" Name="KorisnikPrezime" Nullable="true" />
+          <Property Type="DateTime" Name="KorisnikRegistracija" Nullable="true" Precision="23" />
+          <Property Type="String" Name="KorisnikSlika" Nullable="true" />
+          <Property Type="String" Name="KorisnikPassword" Nullable="true" />
+          <Property Type="String" Name="KorisnikUsername" Nullable="true" />
+          <Property Type="String" Name="KorisnikPasswordSalt" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllBlogRecentComments_Result">
+          <Property Type="Int32" Name="CommentId" Nullable="false" />
+          <Property Type="Int32" Name="CommentIdBlog" Nullable="false" />
+          <Property Type="String" Name="CommentText" Nullable="false" />
+          <Property Type="DateTime" Name="CommentDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="KorisnikId" Nullable="true" />
+          <Property Type="String" Name="KorisnikIme" Nullable="true" />
+          <Property Type="String" Name="KorisnikPrezime" Nullable="true" />
+          <Property Type="String" Name="KorisnikSlika" Nullable="true" />
+          <Property Type="DateTime" Name="KorisnikRegistracija" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllGalleryImage_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="PictureSrc" Nullable="true" />
+          <Property Type="String" Name="PicturePage" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemNaslov" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemText" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemActionLink" Nullable="true" />
+          <Property Type="String" Name="SliderListItemActive" Nullable="true" />
+          <Property Type="String" Name="ItemHTMLplace" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllKorisnik_Result">
+          <Property Type="Int32" Name="KorisnikId" Nullable="false" />
+          <Property Type="String" Name="KorisnikIme" Nullable="true" />
+          <Property Type="String" Name="KorisnikPrezime" Nullable="true" />
+          <Property Type="DateTime" Name="KorisnikRegistracija" Nullable="true" Precision="23" />
+          <Property Type="String" Name="KorisnikSlika" Nullable="true" />
+          <Property Type="String" Name="KorisnikPassword" Nullable="true" />
+          <Property Type="String" Name="KorisnikUsername" Nullable="true" />
+          <Property Type="String" Name="KorisnikPasswordSalt" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllNaslovnicaDataListItem_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="PictureSrc" Nullable="true" />
+          <Property Type="String" Name="PicturePage" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemNaslov" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemText" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemActionLink" Nullable="true" />
+          <Property Type="String" Name="SliderListItemActive" Nullable="true" />
+          <Property Type="String" Name="ItemHTMLplace" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllNaslovnicaSliderListItem_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="PictureSrc" Nullable="true" />
+          <Property Type="String" Name="PicturePage" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemNaslov" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemText" Nullable="true" />
+          <Property Type="String" Name="NaslovnicaItemActionLink" Nullable="true" />
+          <Property Type="String" Name="SliderListItemActive" Nullable="true" />
+          <Property Type="String" Name="ItemHTMLplace" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTAllProizvod_Result">
+          <Property Type="Int32" Name="ProizvodId" Nullable="false" />
+          <Property Type="String" Name="ProizvodImgSrc" Nullable="true" />
+          <Property Type="String" Name="ProizvodNaziv" Nullable="true" />
+          <Property Type="Decimal" Name="ProizvodCijena" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ProizvodPage" Nullable="true" />
+          <Property Type="String" Name="ProizvodCategory" Nullable="true" />
+          <Property Type="String" Name="ProizvodOpis" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTOrSearchProizvod_Result">
+          <Property Type="Int32" Name="ProizvodId" Nullable="false" />
+          <Property Type="String" Name="ProizvodImgSrc" Nullable="true" />
+          <Property Type="String" Name="ProizvodNaziv" Nullable="true" />
+          <Property Type="Decimal" Name="ProizvodCijena" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ProizvodPage" Nullable="true" />
+          <Property Type="String" Name="ProizvodCategory" Nullable="true" />
+          <Property Type="String" Name="ProizvodOpis" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTOrSearchProizvodDescription_Result">
+          <Property Type="Int32" Name="ProizvodId" Nullable="false" />
+          <Property Type="String" Name="ProizvodImgSrc" Nullable="true" />
+          <Property Type="String" Name="ProizvodNaziv" Nullable="true" />
+          <Property Type="Decimal" Name="ProizvodCijena" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ProizvodPage" Nullable="true" />
+          <Property Type="String" Name="ProizvodCategory" Nullable="true" />
+          <Property Type="String" Name="ProizvodOpis" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SELECTOrSearchProizvodId_Result">
+          <Property Type="Int32" Name="ProizvodId" Nullable="false" />
+          <Property Type="String" Name="ProizvodImgSrc" Nullable="true" />
+          <Property Type="String" Name="ProizvodNaziv" Nullable="true" />
+          <Property Type="Decimal" Name="ProizvodCijena" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ProizvodPage" Nullable="true" />
+          <Property Type="String" Name="ProizvodCategory" Nullable="true" />
+          <Property Type="String" Name="ProizvodOpis" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MainDatabaseModelStoreContainer" CdmEntityContainer="MainDatabaseEntities">
+          <EntitySetMapping Name="BlogComment">
+            <EntityTypeMapping TypeName="MainDatabaseModel.BlogComment">
+              <MappingFragment StoreEntitySet="BlogComment">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentIdBlog" ColumnName="CommentIdBlog" />
+                <ScalarProperty Name="CommentText" ColumnName="CommentText" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogItem">
+            <EntityTypeMapping TypeName="MainDatabaseModel.BlogItem">
+              <MappingFragment StoreEntitySet="BlogItem">
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="BlogImageUrl" ColumnName="BlogImageUrl" />
+                <ScalarProperty Name="BlogNaslovnica" ColumnName="BlogNaslovnica" />
+                <ScalarProperty Name="BlogTextSample" ColumnName="BlogTextSample" />
+                <ScalarProperty Name="BlogText" ColumnName="BlogText" />
+                <ScalarProperty Name="BlogActionLink" ColumnName="BlogActionLink" />
+                <ScalarProperty Name="BlogLikes" ColumnName="BlogLikes" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="BlogPage" ColumnName="BlogPage" />
+                <ScalarProperty Name="BlogItemDate" ColumnName="BlogItemDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GalleryAndSliderAndNaslovnica">
+            <EntityTypeMapping TypeName="MainDatabaseModel.GalleryAndSliderAndNaslovnica">
+              <MappingFragment StoreEntitySet="GalleryAndSliderAndNaslovnica">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PictureSrc" ColumnName="PictureSrc" />
+                <ScalarProperty Name="PicturePage" ColumnName="PicturePage" />
+                <ScalarProperty Name="NaslovnicaItemNaslov" ColumnName="NaslovnicaItemNaslov" />
+                <ScalarProperty Name="NaslovnicaItemText" ColumnName="NaslovnicaItemText" />
+                <ScalarProperty Name="NaslovnicaItemActionLink" ColumnName="NaslovnicaItemActionLink" />
+                <ScalarProperty Name="SliderListItemActive" ColumnName="SliderListItemActive" />
+                <ScalarProperty Name="ItemHTMLplace" ColumnName="ItemHTMLplace" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Korisnik">
+            <EntityTypeMapping TypeName="MainDatabaseModel.Korisnik">
+              <MappingFragment StoreEntitySet="Korisnik">
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikPassword" ColumnName="KorisnikPassword" />
+                <ScalarProperty Name="KorisnikUsername" ColumnName="KorisnikUsername" />
+                <ScalarProperty Name="KorisnikPasswordSalt" ColumnName="KorisnikPasswordSalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proizvod">
+            <EntityTypeMapping TypeName="MainDatabaseModel.Proizvod">
+              <MappingFragment StoreEntitySet="Proizvod">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CHECKKorisnik" FunctionName="MainDatabaseModel.Store.CHECKKorisnik" />
+          <FunctionImportMapping FunctionImportName="DELETEGalleryItem" FunctionName="MainDatabaseModel.Store.DELETEGalleryItem" />
+          <FunctionImportMapping FunctionImportName="DELETEHellsBells" FunctionName="MainDatabaseModel.Store.DELETEHellsBells" />
+          <FunctionImportMapping FunctionImportName="DELETEKorisnikItem" FunctionName="MainDatabaseModel.Store.DELETEKorisnikItem" />
+          <FunctionImportMapping FunctionImportName="DELETENaslovnicaItem" FunctionName="MainDatabaseModel.Store.DELETENaslovnicaItem" />
+          <FunctionImportMapping FunctionImportName="INSERTBlogComment" FunctionName="MainDatabaseModel.Store.INSERTBlogComment" />
+          <FunctionImportMapping FunctionImportName="INSERTGalleryItem" FunctionName="MainDatabaseModel.Store.INSERTGalleryItem" />
+          <FunctionImportMapping FunctionImportName="INSERTHellsBells" FunctionName="MainDatabaseModel.Store.INSERTHellsBells" />
+          <FunctionImportMapping FunctionImportName="INSERTKorisnik" FunctionName="MainDatabaseModel.Store.INSERTKorisnik" />
+          <FunctionImportMapping FunctionImportName="INSERTNaslovnicaItem" FunctionName="MainDatabaseModel.Store.INSERTNaslovnicaItem" />
+          <FunctionImportMapping FunctionImportName="SEARCHKorisnik" FunctionName="MainDatabaseModel.Store.SEARCHKorisnik">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SEARCHKorisnik_Result">
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikPassword" ColumnName="KorisnikPassword" />
+                <ScalarProperty Name="KorisnikUsername" ColumnName="KorisnikUsername" />
+                <ScalarProperty Name="KorisnikPasswordSalt" ColumnName="KorisnikPasswordSalt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SEARCHProizvod" FunctionName="MainDatabaseModel.Store.SEARCHProizvod">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SEARCHProizvod_Result">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogComment" FunctionName="MainDatabaseModel.Store.SELECTAllBlogComment">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllBlogComment_Result">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentIdBlog" ColumnName="CommentIdBlog" />
+                <ScalarProperty Name="CommentText" ColumnName="CommentText" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogDetails" FunctionName="MainDatabaseModel.Store.SELECTAllBlogDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllBlogDetails_Result">
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="BlogImageUrl" ColumnName="BlogImageUrl" />
+                <ScalarProperty Name="BlogNaslovnica" ColumnName="BlogNaslovnica" />
+                <ScalarProperty Name="BlogTextSample" ColumnName="BlogTextSample" />
+                <ScalarProperty Name="BlogText" ColumnName="BlogText" />
+                <ScalarProperty Name="BlogActionLink" ColumnName="BlogActionLink" />
+                <ScalarProperty Name="BlogLikes" ColumnName="BlogLikes" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="BlogPage" ColumnName="BlogPage" />
+                <ScalarProperty Name="BlogItemDate" ColumnName="BlogItemDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogItem" FunctionName="MainDatabaseModel.Store.SELECTAllBlogItem">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllBlogItem_Result">
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="BlogImageUrl" ColumnName="BlogImageUrl" />
+                <ScalarProperty Name="BlogNaslovnica" ColumnName="BlogNaslovnica" />
+                <ScalarProperty Name="BlogTextSample" ColumnName="BlogTextSample" />
+                <ScalarProperty Name="BlogText" ColumnName="BlogText" />
+                <ScalarProperty Name="BlogActionLink" ColumnName="BlogActionLink" />
+                <ScalarProperty Name="BlogLikes" ColumnName="BlogLikes" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="BlogPage" ColumnName="BlogPage" />
+                <ScalarProperty Name="BlogItemDate" ColumnName="BlogItemDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogKorisnik" FunctionName="MainDatabaseModel.Store.SELECTAllBlogKorisnik">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllBlogKorisnik_Result">
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikPassword" ColumnName="KorisnikPassword" />
+                <ScalarProperty Name="KorisnikUsername" ColumnName="KorisnikUsername" />
+                <ScalarProperty Name="KorisnikPasswordSalt" ColumnName="KorisnikPasswordSalt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogPages" FunctionName="MainDatabaseModel.Store.SELECTAllBlogPages" />
+          <FunctionImportMapping FunctionImportName="SELECTAllBlogRecentComments" FunctionName="MainDatabaseModel.Store.SELECTAllBlogRecentComments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllBlogRecentComments_Result">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentIdBlog" ColumnName="CommentIdBlog" />
+                <ScalarProperty Name="CommentText" ColumnName="CommentText" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllGalleryImage" FunctionName="MainDatabaseModel.Store.SELECTAllGalleryImage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllGalleryImage_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PictureSrc" ColumnName="PictureSrc" />
+                <ScalarProperty Name="PicturePage" ColumnName="PicturePage" />
+                <ScalarProperty Name="NaslovnicaItemNaslov" ColumnName="NaslovnicaItemNaslov" />
+                <ScalarProperty Name="NaslovnicaItemText" ColumnName="NaslovnicaItemText" />
+                <ScalarProperty Name="NaslovnicaItemActionLink" ColumnName="NaslovnicaItemActionLink" />
+                <ScalarProperty Name="SliderListItemActive" ColumnName="SliderListItemActive" />
+                <ScalarProperty Name="ItemHTMLplace" ColumnName="ItemHTMLplace" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllKorisnik" FunctionName="MainDatabaseModel.Store.SELECTAllKorisnik">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllKorisnik_Result">
+                <ScalarProperty Name="KorisnikId" ColumnName="KorisnikId" />
+                <ScalarProperty Name="KorisnikIme" ColumnName="KorisnikIme" />
+                <ScalarProperty Name="KorisnikPrezime" ColumnName="KorisnikPrezime" />
+                <ScalarProperty Name="KorisnikRegistracija" ColumnName="KorisnikRegistracija" />
+                <ScalarProperty Name="KorisnikSlika" ColumnName="KorisnikSlika" />
+                <ScalarProperty Name="KorisnikPassword" ColumnName="KorisnikPassword" />
+                <ScalarProperty Name="KorisnikUsername" ColumnName="KorisnikUsername" />
+                <ScalarProperty Name="KorisnikPasswordSalt" ColumnName="KorisnikPasswordSalt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllNaslovnicaDataListItem" FunctionName="MainDatabaseModel.Store.SELECTAllNaslovnicaDataListItem">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllNaslovnicaDataListItem_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PictureSrc" ColumnName="PictureSrc" />
+                <ScalarProperty Name="PicturePage" ColumnName="PicturePage" />
+                <ScalarProperty Name="NaslovnicaItemNaslov" ColumnName="NaslovnicaItemNaslov" />
+                <ScalarProperty Name="NaslovnicaItemText" ColumnName="NaslovnicaItemText" />
+                <ScalarProperty Name="NaslovnicaItemActionLink" ColumnName="NaslovnicaItemActionLink" />
+                <ScalarProperty Name="SliderListItemActive" ColumnName="SliderListItemActive" />
+                <ScalarProperty Name="ItemHTMLplace" ColumnName="ItemHTMLplace" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllNaslovnicaSliderListItem" FunctionName="MainDatabaseModel.Store.SELECTAllNaslovnicaSliderListItem">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllNaslovnicaSliderListItem_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PictureSrc" ColumnName="PictureSrc" />
+                <ScalarProperty Name="PicturePage" ColumnName="PicturePage" />
+                <ScalarProperty Name="NaslovnicaItemNaslov" ColumnName="NaslovnicaItemNaslov" />
+                <ScalarProperty Name="NaslovnicaItemText" ColumnName="NaslovnicaItemText" />
+                <ScalarProperty Name="NaslovnicaItemActionLink" ColumnName="NaslovnicaItemActionLink" />
+                <ScalarProperty Name="SliderListItemActive" ColumnName="SliderListItemActive" />
+                <ScalarProperty Name="ItemHTMLplace" ColumnName="ItemHTMLplace" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTAllProizvod" FunctionName="MainDatabaseModel.Store.SELECTAllProizvod">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTAllProizvod_Result">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTDistinctAllProizvodPages" FunctionName="MainDatabaseModel.Store.SELECTDistinctAllProizvodPages" />
+          <FunctionImportMapping FunctionImportName="SELECTOrSearchProizvod" FunctionName="MainDatabaseModel.Store.SELECTOrSearchProizvod">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTOrSearchProizvod_Result">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTOrSearchProizvodDescription" FunctionName="MainDatabaseModel.Store.SELECTOrSearchProizvodDescription">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTOrSearchProizvodDescription_Result">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SELECTOrSearchProizvodId" FunctionName="MainDatabaseModel.Store.SELECTOrSearchProizvodId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MainDatabaseModel.SELECTOrSearchProizvodId_Result">
+                <ScalarProperty Name="ProizvodId" ColumnName="ProizvodId" />
+                <ScalarProperty Name="ProizvodImgSrc" ColumnName="ProizvodImgSrc" />
+                <ScalarProperty Name="ProizvodNaziv" ColumnName="ProizvodNaziv" />
+                <ScalarProperty Name="ProizvodCijena" ColumnName="ProizvodCijena" />
+                <ScalarProperty Name="ProizvodPage" ColumnName="ProizvodPage" />
+                <ScalarProperty Name="ProizvodCategory" ColumnName="ProizvodCategory" />
+                <ScalarProperty Name="ProizvodOpis" ColumnName="ProizvodOpis" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

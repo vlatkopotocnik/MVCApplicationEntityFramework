@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MainDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BlogComment">
+    <Key>
+      <PropertyRef Name="CommentId" />
+    </Key>
+    <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CommentIdBlog" Type="int" Nullable="false" />
+    <Property Name="CommentText" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CommentDate" Type="datetime" />
+    <Property Name="KorisnikId" Type="int" />
+  </EntityType>
+  <EntityType Name="BlogItem">
+    <Key>
+      <PropertyRef Name="BlogId" />
+    </Key>
+    <Property Name="BlogId" Type="int" Nullable="false" />
+    <Property Name="BlogImageUrl" Type="nvarchar(max)" />
+    <Property Name="BlogNaslovnica" Type="nvarchar(max)" />
+    <Property Name="BlogTextSample" Type="nvarchar(max)" />
+    <Property Name="BlogText" Type="nvarchar(max)" />
+    <Property Name="BlogActionLink" Type="nvarchar(max)" />
+    <Property Name="BlogLikes" Type="int" />
+    <Property Name="CommentId" Type="int" />
+    <Property Name="KorisnikId" Type="int" />
+    <Property Name="BlogPage" Type="int" />
+    <Property Name="BlogItemDate" Type="date" />
+  </EntityType>
+  <EntityType Name="GalleryAndSliderAndNaslovnica">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PictureSrc" Type="nvarchar(max)" />
+    <Property Name="PicturePage" Type="nvarchar(max)" />
+    <Property Name="NaslovnicaItemNaslov" Type="nvarchar(max)" />
+    <Property Name="NaslovnicaItemText" Type="nvarchar(max)" />
+    <Property Name="NaslovnicaItemActionLink" Type="nvarchar(max)" />
+    <Property Name="SliderListItemActive" Type="nvarchar(max)" />
+    <Property Name="ItemHTMLplace" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Korisnik">
+    <Key>
+      <PropertyRef Name="KorisnikId" />
+    </Key>
+    <Property Name="KorisnikId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KorisnikIme" Type="nvarchar(max)" />
+    <Property Name="KorisnikPrezime" Type="nvarchar(max)" />
+    <Property Name="KorisnikRegistracija" Type="datetime" />
+    <Property Name="KorisnikSlika" Type="nvarchar(max)" />
+    <Property Name="KorisnikPassword" Type="nvarchar(max)" />
+    <Property Name="KorisnikUsername" Type="nvarchar(max)" />
+    <Property Name="KorisnikPasswordSalt" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Proizvod">
+    <Key>
+      <PropertyRef Name="ProizvodId" />
+    </Key>
+    <Property Name="ProizvodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProizvodImgSrc" Type="nvarchar(max)" />
+    <Property Name="ProizvodNaziv" Type="nvarchar(max)" />
+    <Property Name="ProizvodCijena" Type="money" />
+    <Property Name="ProizvodPage" Type="int" />
+    <Property Name="ProizvodCategory" Type="nvarchar(max)" />
+    <Property Name="ProizvodOpis" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK_BlogItem_ToBlogComment">
+    <End Role="BlogComment" Type="Self.BlogComment" Multiplicity="0..1" />
+    <End Role="BlogItem" Type="Self.BlogItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BlogComment">
+        <PropertyRef Name="CommentId" />
+      </Principal>
+      <Dependent Role="BlogItem">
+        <PropertyRef Name="CommentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="CHECKKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="DELETEGalleryItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PictureId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DELETEHellsBells" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DELETEKorisnikItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KorisnikId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DELETENaslovnicaItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="INSERTBlogComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CommentIdBlog" Type="int" Mode="In" />
+    <Parameter Name="CommentText" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CommentDate" Type="datetime" Mode="In" />
+    <Parameter Name="KorisnikId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="INSERTGalleryItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PictureSrc" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="PicturePage" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ItemHTMLplace" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="INSERTHellsBells" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodImgSrc" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ProizvodNaziv" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ProizvodCijena" Type="money" Mode="In" />
+    <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+    <Parameter Name="ProizvodCategory" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ProizvodOpis" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="INSERTKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KorisnikIme" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="KorisnikPrezime" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="KorisnikRegistracija" Type="datetime" Mode="In" />
+    <Parameter Name="KorisnikSlika" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="KorisnikPassword" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="INSERTNaslovnicaItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PictureSrc" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NaslovnicaItemNaslov" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NaslovnicaItemText" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NaslovnicaItemActionLink" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="SliderListItemActive" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ItemHTMLplace" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SEARCHKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KorisnikUsername" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="KorisnikPassword" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SEARCHProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodName" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SELECTAllBlogComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CommentIdBlog" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SELECTAllBlogDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BlogId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SELECTAllBlogItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BlockPage" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SELECTAllBlogKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="KorisnikId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SELECTAllBlogPages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllBlogRecentComments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllGalleryImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllKorisnik" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllNaslovnicaDataListItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllNaslovnicaSliderListItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTAllProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SELECTDistinctAllProizvodPages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SELECTOrSearchProizvod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodPage" Type="int" Mode="In" />
+    <Parameter Name="ProizvodSearch" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SELECTOrSearchProizvodDescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodSearch" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SELECTOrSearchProizvodId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ProizvodSearch" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="MainDatabaseModelStoreContainer">
+    <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BlogItem" EntityType="Self.BlogItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GalleryAndSliderAndNaslovnica" EntityType="Self.GalleryAndSliderAndNaslovnica" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Proizvod" EntityType="Self.Proizvod" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_BlogItem_ToBlogComment" Association="Self.FK_BlogItem_ToBlogComment">
+      <End Role="BlogComment" EntitySet="BlogComment" />
+      <End Role="BlogItem" EntitySet="BlogItem" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

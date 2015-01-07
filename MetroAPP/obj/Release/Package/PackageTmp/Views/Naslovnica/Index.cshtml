@@ -1,0 +1,63 @@
+﻿@model MetroAPP.Models.Naslovnica.NaslovnicaDataListAndSliderItemList
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<section id="main-slider" class="no-margin">
+    <div class="carousel slide">
+        
+        <div class="carousel-inner" style="height: 400px">
+                @foreach (var item in Model.NaslovnicaSliderItems)
+                {
+                    <div class="@item.SliderListItemActive" style="background-image: url(@item.SliderListItemImgUrl)">
+                        <div class="container">
+                            <div class="row slide-margin">
+                                <div class="col-sm-6">
+                                    <div class="carousel-content" style="margin-top: -80px">
+                                        <h1 class="animation animated-item-1" style="color: black">@item.SliderLitsItemNaslov</h1>
+                                        <h2 class="animation animated-item-2" style="color: black">@item.SliderListItemText</h2>
+                                        <h2 class="btn-primary" style="width: 25%"> @Html.ActionLink("BUY NOW", "Index", @item.SliderListItemActionLink) </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.item-->
+                }       
+        </div><!--/.carousel-inner-->
+    </div><!--/.carousel-->
+    <a class="prev hidden-xs" href="#main-slider" data-slide="prev">
+        <img src="~/Images/Naslovnica/Slider/left.png" />
+    </a>
+    <a class="next hidden-xs" href="#main-slider" data-slide="next">
+        <img src="~/Images/Naslovnica/Slider/right.png" />
+    </a>
+</section><!--/#main-slider-->
+
+<section id="recent-works">
+    <div class="container">
+        <div class="center wow fadeInDown">
+            <h2 style="padding-top: 20px;">Latest products</h2>
+            <p class="lead">Audio-Technica creates high performance microphones, headphones, wireless systems, mixers, and electronic products for home and professional use</p>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.NaslovnicaDataListItems)
+            {
+                <div class="col-xs-12 col-sm-4 col-md-3">
+                    <div class="recent-work-wrap">
+                        <img class="img-responsive" src="~/Images/Naslovnica/Headphones/@item.DataListItemImgSrc" alt="">
+                        <div class="overlay">
+                            <div class="recent-work-inner">
+                                <h3><a>@item.DataListItemNaslov</a></h3>
+                                <p>@item.DataListItemText</p>
+                                @Html.ActionLink("VIEW MORE", "Index", @item.DataListActionLink)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div><!--/.row-->
+    </div><!--/.container-->
+</section><!--/#recent-works-->

@@ -1,0 +1,40 @@
+﻿@model MetroAPP.Models.Galerija.GalleryPictureItemsAndPage
+@{
+    ViewBag.Title = "Gallery";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<section id="portfolio">
+    <div class="container">
+        <div class="text-primary">
+            <h2>Gallery</h2>
+            <p class="lead">See our gallery of photos</p>
+        </div>
+        <div class="center">
+            <ul class="portfolio-filter text-center">
+                <li><a class="btn btn-default active" href="#" data-filter="*">All</a></li>
+                @foreach (var item in Model.Pages)
+                {
+                    <li><a class="btn btn-default" href="#" data-filter=".@item">@item</a></li>
+                }
+            </ul><!--/#portfolio-filter-->
+        </div>
+        <div class="row">
+            <div class="portfolio-items">
+                @foreach (var item in Model.GpItems)
+                {
+                    <div class="portfolio-item @item.PicturePage col-xs-12 col-sm-4 col-md-3">
+                        <div class="recent-work-wrap">
+                            <img class="img-responsive" src="~/Images/Gallery/@item.PictureSrc" alt="">
+                            <div class="overlay">
+                                <div class="recent-work-inner">
+                                    <a class="preview" href="~/Images/Gallery/@item.PictureSrc" rel="prettyPhoto"><img src="~/Images/Gallery/magnifying-glass.png" alt="Zoom" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.portfolio-item-->
+                }
+            </div>    
+        </div>
+    </div>
+</section>
